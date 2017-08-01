@@ -1,9 +1,6 @@
 
-//lazy val dhRegistry = "hub.docker.com"
 lazy val dhNamespace = "acteek"
-//lazy val nexusUrl = "http://sonatype-nexus.livetex.ru"
 lazy val projectVersion = "0.0.2"
-//lazy val scalaUtilsVersion = "0.1.25-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 

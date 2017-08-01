@@ -25,7 +25,7 @@ sbt run
 docker run -p {port}:{port} acteek/weather-info:{version}
 
 ```
-Для возмодности пушить на hub.docker.com
+Для возможности пушить на hub.docker.com
 
 ```bash
 
