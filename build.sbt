@@ -1,13 +1,14 @@
 
-lazy val dhNamespace = "acteek"
+lazy val projectName = "Weather-Info"
 lazy val projectVersion = "0.0.2"
+lazy val dhNamespace = "acteek"
 
 scalaVersion := "2.11.7"
 
 lazy val main = (project in file("."))
   .settings(
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
-    name := "Weather-Info",
+    name := projectName,
     version := projectVersion,
       libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % "3.0.0",
@@ -20,9 +21,9 @@ lazy val main = (project in file("."))
       "com.typesafe.akka" %% "akka-slf4j" % "2.4.19"
     )
   )
-  .enablePlugins(DockerPlugin).
-  settings(docker <<= docker.dependsOn(Keys.`package`.in(Compile, packageBin))).
-  settings(
+  .enablePlugins(DockerPlugin)
+  .settings(docker := docker.dependsOn(Keys.`package`.in(Compile, packageBin)).value)
+  .settings(
     imageNames in docker := Seq(
       ImageName(s"$dhNamespace/${name.value.toLowerCase}:latest"),
       ImageName(
