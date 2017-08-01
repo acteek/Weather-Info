@@ -14,7 +14,10 @@ lazy val main = (project in file("."))
       "com.typesafe.akka" %% "akka-http" % "10.0.6",
       "com.typesafe" % "config" % "1.3.1",
       "ch.qos.logback" % "logback-classic" % "1.1.7",
-      "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0"
+      "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",
+      "org.json4s" %% "json4s-native" % "3.5.3",
+      "org.json4s" % "json4s-jackson_2.11" % "3.5.3",
+      "com.typesafe.akka" %% "akka-slf4j" % "2.4.19"
     )
   )
   .enablePlugins(DockerPlugin).

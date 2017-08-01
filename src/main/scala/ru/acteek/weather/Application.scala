@@ -5,7 +5,11 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import com.typesafe.scalalogging.StrictLogging
+import org.json4s.DefaultFormats
+import org.json4s.jackson.JsonMethods.parse
+import ru.acteek.weather.api.WeatherMapClient
 import ru.acteek.weather.conf.ApplicationConfig._
+import ru.acteek.weather.storage.ApiResponse
 
 object Application extends App with StrictLogging {
 
@@ -37,7 +41,15 @@ object Application extends App with StrictLogging {
         }
     }
 
-  Http().bindAndHandle(route, "0.0.0.0", port)
-  logger.info(s"Server start at http://0.0.0.0:$port/")
+  Http()
+    .bindAndHandle(route, "0.0.0.0", port)
+     logger.info(s"Server start at http://0.0.0.0:$port/")
 
+  val api = WeatherMapClient.fromConfig()
+val re =   api.getDataByCityName("Кипр").map {
+    r =>
+//      implicit val formats = DefaultFormats
+//      val a = parse(r).extract[ApiResponse]
+      system.log.info("RESPONSE => {}", r)
+  }
 }

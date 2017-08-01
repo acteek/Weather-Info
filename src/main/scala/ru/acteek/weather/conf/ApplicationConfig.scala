@@ -1,12 +1,12 @@
 package ru.acteek.weather.conf
 
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 
 
 object ApplicationConfig {
 
-  val conf = ConfigFactory.load()
+  val conf: Config = ConfigFactory.load()
 
   val port: Int = conf.getInt("http.port")
-
+  val apiConfig: Config = conf.getConfig("api.openWeatherMap")
 }
