@@ -46,7 +46,7 @@ object Application extends App with StrictLogging {
      logger.info(s"Server start at http://0.0.0.0:$port/")
 
   val api = WeatherMapClient.fromConfig()
-val re =   api.getDataByCityName("Кипр").map {
+val re =   api.getDataByCityName("Сочи").map {
     r =>
 //      implicit val formats = DefaultFormats
 //      val a = parse(r).extract[ApiResponse]

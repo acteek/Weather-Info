@@ -4,9 +4,9 @@ case class Metrics (
                    dt: Long,
                    main : MetricMain,
                    weather: List[Weather],
-                   clouds: Tuple1[Int],
+                   clouds: Clouds,
                    wind: Wind,
-                   rain: Nothing,
-                   sys: Tuple1[String],
+                   rain: Option[Rain] ,
+                   sys: Option[Sys],
                    dt_txt: String
                    )
