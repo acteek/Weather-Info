@@ -1,6 +1,6 @@
-package ru.acteek.weather.storage
+package ru.acteek.weather.api.weathermap.data
 
-case class Metrics (
+case class RowMetrics(
                    dt: Long,
                    main : MetricMain,
                    weather: List[Weather],

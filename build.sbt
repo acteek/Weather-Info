@@ -16,7 +16,9 @@ lazy val main = (project in file("."))
       "com.typesafe" % "config" % "1.3.1",
       "ch.qos.logback" % "logback-classic" % "1.1.7",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",
-     // "org.json4s" %% "json4s-native" % "3.5.3",
+      "joda-time" % "joda-time" % "2.9.9",
+      "org.joda" % "joda-convert" % "1.8.2",
+      "com.github.blemale" % "scaffeine_2.11" % "2.2.0",
       "org.json4s" % "json4s-jackson_2.11" % "3.3.0",
       "com.typesafe.akka" %% "akka-slf4j" % "2.4.19"
     )

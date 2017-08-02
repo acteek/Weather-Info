@@ -1,4 +1,4 @@
-package ru.acteek.weather.storage
+package ru.acteek.weather.api.weathermap.data
 
 case class MetricMain (
                       temp: Float,
