@@ -23,16 +23,16 @@ object Application extends App with StrictLogging {
   val route =
     get {
       path("") {
-        getFromResource("static/index.html")
+        getFromResource("ui/index.html")
       } ~
         pathPrefix("css") {
           encodeResponse {
-            getFromResourceDirectory("static/css")
+            getFromResourceDirectory("ui/css")
           }
         } ~
         pathPrefix("js") {
           encodeResponse {
-            getFromResourceDirectory("static/js")
+            getFromResourceDirectory("ui/dist")
           }
         } ~
         path("metrics") {

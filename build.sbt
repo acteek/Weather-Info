@@ -5,6 +5,11 @@ lazy val dhNamespace = "acteek"
 
 scalaVersion := "2.11.7"
 
+npmWorkingDir := "src/main/resources/ui"
+npmCompileCommands := "run build"
+npmTestCommands := "run test"
+npmTestCommands := "run clean"
+
 lazy val main = (project in file("."))
   .settings(
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
@@ -23,7 +28,7 @@ lazy val main = (project in file("."))
       "com.typesafe.akka" %% "akka-slf4j" % "2.4.19"
     )
   )
-  .enablePlugins(DockerPlugin)
+  .enablePlugins(DockerPlugin, Npm)
   .settings(docker := docker.dependsOn(Keys.`package`.in(Compile, packageBin)).value)
   .settings(
     imageNames in docker := Seq(

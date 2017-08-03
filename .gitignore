@@ -3,7 +3,14 @@
 *.class
 *.log
 .idea
-/project/project/
 
-/target
+
+
+src/main/resources/ui/target/
+
+**/node_modules/
+/ui/build/bundle.js
+/src/main/resources/ui/dist/
+/project/project/target/
 /project/target/
+/target/
