@@ -8,7 +8,7 @@ import VueMomentJS from "vue-momentjs";
 import './temperatureChart.js'
 import './humidityChart.js'
 import './WindSpeedChart.js'
-
+//TODO  тут нужно порефакторить !
 
 Vue.use(VueResource);
 Vue.use(VueMomentJS, moment);
@@ -25,8 +25,10 @@ var vm = new Vue({
   el: '#app',
   data: function() { return {
     searchCity: 'москва', //TODO Убрать значение после отладки
+    dateMin: currentDate,
+    dateMax: this.$moment(currentDate).add(5,'days').format(df),
     dateFrom: currentDate,
-    dateTo: this.$moment(currentDate).add(5,'days').format(df),
+    dateTo: this.$moment(currentDate).add(3,'days').format(df),
     labels: [],
     tempData: [],
     humData: [],
@@ -38,10 +40,14 @@ var vm = new Vue({
      this.tempData = []
      this.humData = []
      this.weedSpeedData = []
+     tmpLabels = []
+     tmpTempData = []
+     humTempData = []
+     weedSpeedTempData = []
   	 this.$http.get('metrics?city='+this.searchCity+'&date-from='+this.dateFrom+'&date-to='+this.dateTo)
   	    .then(response => {
 //  	       console.log(response) //TODO Убрать значение после отладки
-           response.body.metrics.forEach ( metric => {
+           response.body.forEach ( metric => {
              for (var key in metric) {
 //               console.log("KEY" + key + " => " + metric[key].temp) //TODO Убрать значение после отладки
                 tmpLabels.push(key)
@@ -55,6 +61,7 @@ var vm = new Vue({
       this.tempData = tmpTempData
       this.humData = humTempData
       this.weedSpeedData = weedSpeedTempData
+
   	}
   }
 })

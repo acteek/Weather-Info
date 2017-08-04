@@ -30,10 +30,11 @@ object WeatherMapClient {
 
 class WeatherMapClient(apiConfig: ApiConfig)
                       (implicit system: ActorSystem,
-                       materializer: ActorMaterializer) extends  ApiClient {
+                       materializer: ActorMaterializer) extends ApiClient {
 
 
   import apiConfig._
+
   implicit val executionContext: ExecutionContext = system.dispatcher
 
   private val http = Http()
@@ -53,17 +54,20 @@ class WeatherMapClient(apiConfig: ApiConfig)
     }
   )
 
+  //  val metricsByDate = Map[String, Metrics]()
+
   private def normalized(jsonString: String): CityMetrics = {
     implicit val formats = DefaultFormats
     val json = parse(jsonString)
     val city = (json \ "city").extract[City]
-    val metrics = (json \ "list").extract[List[RowMetrics]].map { m =>
-      Map(m.dt_txt -> Metrics(
-        m.main.temp, m.main.temp_min, m.main.temp_max, m.main.humidity, m.wind.speed, m.wind.deg)
-      )
+
+    val metricsByDate = (json \ "list").extract[List[RowMetrics]].flatMap { m =>
+      val metrics = Metrics(m.main.temp, m.main.temp_min, m.main.temp_max, m.main.humidity, m.wind.speed, m.wind.deg)
+      Map(m.dt_txt -> metrics)
     }
-    logger.debug("For City => {} Metrics => {}", city, metrics)
-    CityMetrics(city.id, city.name, metrics)
+
+      logger.debug("Metrics => {}", metricsByDate)
+    CityMetrics(city.id, city.name, metricsByDate)
   }
 
   def getMetricByCityId(id: Int): Future[CityMetrics] =
