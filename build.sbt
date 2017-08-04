@@ -8,7 +8,7 @@ scalaVersion := "2.11.7"
 npmWorkingDir := "src/main/resources/ui"
 npmCompileCommands := "run build"
 npmTestCommands := "run test"
-npmTestCommands := "run clean"
+npmCleanCommands := "run clean"
 
 lazy val main = (project in file("."))
   .settings(

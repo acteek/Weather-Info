@@ -1,12 +1,14 @@
 {
-  "name": "ui_1",
-  "description": "A Vue.js project",
+  "name": "weather-info-ui",
+  "description": "ui",
   "version": "1.0.0",
   "author": "ryazanov.s <ryazanov.s@speek.im>",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "clean": "rm -rf node_modules/ && rm -rf dist/",
+    "test": "echo 'npm tests'"
   },
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
