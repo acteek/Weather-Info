@@ -8,7 +8,6 @@ import org.json4s.{DefaultFormats, NoTypeHints}
 import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.{read, write}
 import org.json4s.jackson.JsonMethods._
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
@@ -27,8 +26,8 @@ class StorageImpl(val apiClient: ApiClient)(implicit system: ActorSystem) extend
   def renderJson(metrics: CityMetrics): ResponseJson = {
     implicit val formats = Serialization.formats(NoTypeHints)
     val ser = write(metrics)
-    val outJson = pretty(render(parse(ser).snakizeKeys))
-    logger.info("Out Json => {}", outJson)
+    val outJson = compact(render(parse(ser).snakizeKeys))
+    logger.debug("Out Json => {}", outJson)
     outJson
   }
 

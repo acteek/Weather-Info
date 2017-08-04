@@ -1,79 +1,43 @@
 import Vue from 'vue'
-import VueCharts from 'vue-chartjs'
 import 'jquery';
 import Tether from 'tether';
 import 'bootstrap/dist/js/bootstrap'
 import VueResource from 'vue-resource';
+import moment from "moment";
+import VueMomentJS from "vue-momentjs";
+import './temperatureChart.js'
+import './humidityChart.js'
+import './WindSpeedChart.js'
+
 
 Vue.use(VueResource);
+Vue.use(VueMomentJS, moment);
 
-
-Vue.component('temp-chart', {
-  extends: VueCharts.Line,
-  computed: {
-    labels() { return this.$root.labels},
-    datasets(){
-    return [{
-          fill: false,
-          label: 'Температура °С',
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255,99,132,1)',
-          borderWidth: 1 ,
-          data: this.$root.tempData
-        }]
-    }
-  },
-
-  watch: {
-    datasets: function (newData) {
-//      console.log('Change Data Set')
-      let chart = this._chart
-      chart.data.datasets = newData
-      chart.data.labels = this.labels,
-      chart.update()
-    },
-    labels: function (newData) {
-//      console.log('Change Data Set')
-      let chart = this._chart
-      chart.data.datasets = this.datasets
-      chart.data.labels = newData,
-      chart.update()
-    }
-  },
-
-  methods: {
-    render: function() {
-         this.renderChart({
-               labels: this.labels,
-               datasets: this.datasets
-          }, {responsive: true, maintainAspectRatio: false})
- }},
-
-  mounted () {
-     this.render()
-  }
-})
-
-
-
-
+var df = 'YYYY-MM-DDTHH:mm'
+var currentDate = moment().format(df);
+var tmpLabels = []
+var tmpTempData = []
+var humTempData = []
+var weedSpeedTempData = []
 
 
 var vm = new Vue({
   el: '#app',
   data: function() { return {
     searchCity: 'москва', //TODO Убрать значение после отладки
-    dateFrom: '2017-08-01T12:00', //TODO ограничения по времени
-    dateTo: '2017-08-01T14:00',
+    dateFrom: currentDate,
+    dateTo: this.$moment(currentDate).add(5,'days').format(df),
     labels: [],
-    tempData: []
+    tempData: [],
+    humData: [],
+    weedSpeedData: []
   }},
   methods: {
     getMetrics: function() {
      this.labels = []
      this.tempData = []
-     var tmpLabels = []
-     var tmpTempData = []
+     this.humData = []
+     this.weedSpeedData = []
   	 this.$http.get('metrics?city='+this.searchCity+'&date-from='+this.dateFrom+'&date-to='+this.dateTo)
   	    .then(response => {
 //  	       console.log(response) //TODO Убрать значение после отладки
@@ -82,11 +46,15 @@ var vm = new Vue({
 //               console.log("KEY" + key + " => " + metric[key].temp) //TODO Убрать значение после отладки
                 tmpLabels.push(key)
                 tmpTempData.push(metric[key].temp)
+                humTempData.push(metric[key].humidity)
+                weedSpeedTempData.push(metric[key].wind_speed)
              }
            })
         })
       this.labels = tmpLabels
       this.tempData = tmpTempData
+      this.humData = humTempData
+      this.weedSpeedData = weedSpeedTempData
   	}
   }
 })

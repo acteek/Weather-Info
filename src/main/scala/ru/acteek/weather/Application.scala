@@ -18,7 +18,6 @@ object Application extends App with StrictLogging {
 
   val api = WeatherMapClient.fromConfig()
   val storage = new StorageImpl(api)
-  //
 
   val route =
     get {
@@ -37,6 +36,7 @@ object Application extends App with StrictLogging {
         } ~
         path("metrics") {
           parameters("city", "date-from", "date-to") { (city, dateFrom, dateTo) =>
+            logger.info("Received  request with city=>[{}] dateFrom=>[{}] dateTo=>[{}]", city, dateFrom, dateTo)
             onSuccess(storage.getMetrics(city, dateFrom, dateTo)) { resp =>
               complete(resp)
             }

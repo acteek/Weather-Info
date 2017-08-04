@@ -1,12 +1,12 @@
 package ru.acteek.weather.api.weathermap.data
 
 case class MetricMain (
-                      temp: Float,
-                      temp_min: Float,
-                      temp_max: Float,
-                      pressure: Float,
-                      sea_level: Float,
-                      grnd_level: Float,
+                      temp: Double,
+                      temp_min: Double,
+                      temp_max: Double,
+                      pressure: Double,
+                      sea_level: Double,
+                      grnd_level: Double,
                       humidity: Int,
-                      temp_kf: Float
+                      temp_kf: Double
                       )

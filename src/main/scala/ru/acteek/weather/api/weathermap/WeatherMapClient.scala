@@ -59,7 +59,7 @@ class WeatherMapClient(apiConfig: ApiConfig)
     val city = (json \ "city").extract[City]
     val metrics = (json \ "list").extract[List[RowMetrics]].map { m =>
       Map(m.dt_txt -> Metrics(
-        m.main.temp, m.main.temp_min, m.main.temp_max, m.main.pressure, m.wind.speed, m.wind.deg)
+        m.main.temp, m.main.temp_min, m.main.temp_max, m.main.humidity, m.wind.speed, m.wind.deg)
       )
     }
     logger.debug("For City => {} Metrics => {}", city, metrics)
