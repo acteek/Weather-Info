@@ -54,18 +54,16 @@ class WeatherMapClient(apiConfig: ApiConfig)
     }
   )
 
-  //  val metricsByDate = Map[String, Metrics]()
-
   private def normalized(jsonString: String): CityMetrics = {
     implicit val formats = DefaultFormats
     val json = parse(jsonString)
     val city = (json \ "city").extract[City]
 
     val metricsByDate = (json \ "list").extract[List[RowMetrics]].flatMap { m =>
-      val metrics = Metrics(m.main.temp, m.main.temp_min, m.main.temp_max, m.main.humidity, m.wind.speed, m.wind.deg)
+      val metrics = Metrics(
+        m.main.temp, m.main.temp_min, m.main.temp_max, m.main.humidity, m.wind.speed, m.wind.deg)
       Map(m.dt_txt -> metrics)
     }
-
       logger.debug("Metrics => {}", metricsByDate)
     CityMetrics(city.id, city.name, metricsByDate)
   }

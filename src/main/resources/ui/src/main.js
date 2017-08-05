@@ -3,65 +3,81 @@ import 'jquery';
 import Tether from 'tether';
 import 'bootstrap/dist/js/bootstrap'
 import VueResource from 'vue-resource';
-import moment from "moment";
-import VueMomentJS from "vue-momentjs";
+import moment from 'moment';
+import VueMomentJS from 'vue-momentjs';
 import './temperatureChart.js'
 import './humidityChart.js'
-import './WindSpeedChart.js'
-//TODO  тут нужно порефакторить !
+import './windSpeedChart.js'
+import {tmp, clearTempData} from './tempStorage.js'
+
 
 Vue.use(VueResource);
 Vue.use(VueMomentJS, moment);
 
-var df = 'YYYY-MM-DDTHH:mm'
-var currentDate = moment().format(df);
-var tmpLabels = []
-var tmpTempData = []
-var humTempData = []
-var weedSpeedTempData = []
+const df = 'YYYY-MM-DDTHH:mm'
+var currentDate = moment().format(df) ;
 
 
 var vm = new Vue({
   el: '#app',
   data: function() { return {
-    searchCity: 'москва', //TODO Убрать значение после отладки
-    dateMin: currentDate,
-    dateMax: this.$moment(currentDate).add(5,'days').format(df),
+    searchCity: '',
     dateFrom: currentDate,
     dateTo: this.$moment(currentDate).add(3,'days').format(df),
     labels: [],
     tempData: [],
+    tempMaxData: [],
+    tempMinData: [],
     humData: [],
     weedSpeedData: []
   }},
+  computed: {
+    dateMin() {
+     return currentDate
+    },
+    dateMax() {
+     return this.$moment(currentDate).add(5,'days').format(df)
+    }
+  },
   methods: {
     getMetrics: function() {
-     this.labels = []
-     this.tempData = []
-     this.humData = []
-     this.weedSpeedData = []
-     tmpLabels = []
-     tmpTempData = []
-     humTempData = []
-     weedSpeedTempData = []
+     this.clearMetricData()
+     clearTempData()
   	 this.$http.get('metrics?city='+this.searchCity+'&date-from='+this.dateFrom+'&date-to='+this.dateTo)
   	    .then(response => {
 //  	       console.log(response) //TODO Убрать значение после отладки
            response.body.forEach ( metric => {
              for (var key in metric) {
 //               console.log("KEY" + key + " => " + metric[key].temp) //TODO Убрать значение после отладки
-                tmpLabels.push(key)
-                tmpTempData.push(metric[key].temp)
-                humTempData.push(metric[key].humidity)
-                weedSpeedTempData.push(metric[key].wind_speed)
+                tmp.labels.push(key)
+                tmp.tempData.push(metric[key].temp)
+                tmp.humData.push(metric[key].humidity)
+                tmp.weedSpeedData.push(metric[key].wind_speed)
+                tmp.tempMinData.push(metric[key].temp_min)
+                tmp.tempMaxData.push(metric[key].temp_max)
              }
            })
         })
-      this.labels = tmpLabels
-      this.tempData = tmpTempData
-      this.humData = humTempData
-      this.weedSpeedData = weedSpeedTempData
+      this.labels = tmp.labels
+      this.tempData = tmp.tempData
+      this.humData = tmp.humData
+      this.weedSpeedData = tmp.weedSpeedData
+      this.tempMinData = tmp.tempMinData
+      this.tempMaxData = tmp.tempMaxData
+  	},
 
+  	clearMetricData: function() {
+  	  this.labels = []
+      this.tempData = []
+      this.humData = []
+      this.weedSpeedData = []
+      this.tempMaxData = []
+      this.tempMinData = []
   	}
-  }
+  },
+  created: function() {
+    //Первичная отрисовка
+  	this.searchCity = 'Санкт-Петербург'
+  	this.getMetrics()
+  	},
 })

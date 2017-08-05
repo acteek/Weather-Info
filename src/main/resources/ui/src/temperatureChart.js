@@ -7,14 +7,32 @@ export default Vue.component('temp-chart', {
   computed: {
     labels() { return this.$root.labels},
     datasets(){
-    return [{
+    return [
+        {
           fill: true,
           label: 'Температура °С',
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255,60,132,1)',
+          borderColor: 'rgba(255, 60, 132, 1)',
           borderWidth: 1 ,
           data: this.$root.tempData
-        }]
+        },
+        {
+          fill: true,
+          label: 'Min отклонение',
+          backgroundColor: 'rgba(41, 194, 168, 0.1)',
+          borderColor: 'rgba(41, 194, 168, 1)',
+          borderWidth: 1 ,
+          data: this.$root.tempMinData
+        },
+        {
+          fill: true,
+          label: 'Max отклонение',
+          backgroundColor: 'rgba(222, 222, 49, 0.1)',
+          borderColor: 'rgba(222, 222, 49, 1)',
+          borderWidth: 1 ,
+          data: this.$root.tempMaxData
+        }
+     ]
     }
   },
 
