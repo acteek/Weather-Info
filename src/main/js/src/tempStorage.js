@@ -10,7 +10,8 @@ export var tmp = {
    tempMinData: [],
    tempMaxData: [],
    humData: [],
-   weedSpeedData: []
+   weedSpeedData: [],
+   weedDegData: []
 }
 
 export function clearTempData() {

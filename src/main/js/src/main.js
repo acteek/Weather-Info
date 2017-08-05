@@ -8,6 +8,8 @@ import VueMomentJS from 'vue-momentjs';
 import './temperatureChart.js'
 import './humidityChart.js'
 import './windSpeedChart.js'
+import './windDegChart.js'
+import './Statistic.js'
 import {tmp, clearTempData} from './tempStorage.js'
 
 
@@ -29,7 +31,8 @@ var vm = new Vue({
     tempMaxData: [],
     tempMinData: [],
     humData: [],
-    weedSpeedData: []
+    weedSpeedData: [],
+    weedDegData: []
   }},
   computed: {
     dateMin() {
@@ -38,9 +41,11 @@ var vm = new Vue({
     dateMax() {
      return this.$moment(currentDate).add(5,'days').format(df)
     }
+
+
   },
   methods: {
-    getMetrics: function() {
+   getMetrics: function() {
      this.clearMetricData()
      clearTempData()
   	 this.$http.get('metrics?city='+this.searchCity+'&date-from='+this.dateFrom+'&date-to='+this.dateTo)
@@ -55,6 +60,7 @@ var vm = new Vue({
                 tmp.weedSpeedData.push(metric[key].wind_speed)
                 tmp.tempMinData.push(metric[key].temp_min)
                 tmp.tempMaxData.push(metric[key].temp_max)
+                tmp.weedDegData.push(metric[key].wind_deg)
              }
            })
         })
@@ -64,6 +70,7 @@ var vm = new Vue({
       this.weedSpeedData = tmp.weedSpeedData
       this.tempMinData = tmp.tempMinData
       this.tempMaxData = tmp.tempMaxData
+      this.weedDegData = tmp.weedDegData
   	},
 
   	clearMetricData: function() {
@@ -73,6 +80,7 @@ var vm = new Vue({
       this.weedSpeedData = []
       this.tempMaxData = []
       this.tempMinData = []
+      this.weedDegData = []
   	}
   },
   created: function() {
