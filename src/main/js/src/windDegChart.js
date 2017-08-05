@@ -16,8 +16,8 @@ export default Vue.component('weed-deg-chart', {
     return [{
           fill: true,
           label: 'Напрввление ветра',
-          backgroundColor: 'rgba(99, 132, 255, 0.2)',
-          borderColor: 'rgba(99, 123, 255, 1)',
+          backgroundColor: 'rgba(212, 132, 28, 0.2)',
+          borderColor: 'rgba(212, 132, 28, 1)',
           borderWidth: 1 ,
           data: this.$root.weedDegData
         }]

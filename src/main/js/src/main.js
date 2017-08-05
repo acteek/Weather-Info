@@ -10,6 +10,7 @@ import './humidityChart.js'
 import './windSpeedChart.js'
 import './windDegChart.js'
 import './Statistic.js'
+import './StatisticTempChart.js'
 import {tmp, clearTempData} from './tempStorage.js'
 
 
@@ -41,19 +42,16 @@ var vm = new Vue({
     dateMax() {
      return this.$moment(currentDate).add(5,'days').format(df)
     }
-
-
   },
   methods: {
+//TODO Можно отрефачить для использования в статистике
    getMetrics: function() {
      this.clearMetricData()
      clearTempData()
   	 this.$http.get('metrics?city='+this.searchCity+'&date-from='+this.dateFrom+'&date-to='+this.dateTo)
   	    .then(response => {
-//  	       console.log(response) //TODO Убрать значение после отладки
            response.body.forEach ( metric => {
              for (var key in metric) {
-//               console.log("KEY" + key + " => " + metric[key].temp) //TODO Убрать значение после отладки
                 tmp.labels.push(key)
                 tmp.tempData.push(metric[key].temp)
                 tmp.humData.push(metric[key].humidity)

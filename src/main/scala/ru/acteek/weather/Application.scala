@@ -47,9 +47,4 @@ object Application extends App with StrictLogging {
   Http().bindAndHandle(route, "0.0.0.0", port)
   logger.info(s"Server start at http://0.0.0.0:$port/")
 
-
-//  storage.getMetrics("Москва", "", "").map {
-//    r =>
-//      system.log.info("RESPONSE => {}", r)
-//  }
 }

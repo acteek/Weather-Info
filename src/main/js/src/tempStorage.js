@@ -11,7 +11,8 @@ export var tmp = {
    tempMaxData: [],
    humData: [],
    weedSpeedData: [],
-   weedDegData: []
+   weedDegData: [],
+   statTempData: []
 }
 
 export function clearTempData() {
