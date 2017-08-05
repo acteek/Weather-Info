@@ -5,7 +5,7 @@ lazy val dhNamespace = "acteek"
 
 scalaVersion := "2.11.7"
 
-npmWorkingDir := "src/main/resources/ui"
+npmWorkingDir := "src/main/js"
 npmCompileCommands := "run build"
 npmTestCommands := "run test"
 npmCleanCommands := "run clean"
