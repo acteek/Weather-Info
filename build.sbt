@@ -53,7 +53,7 @@ lazy val main = (project in file("."))
     val jarTarget = s"$app/${name.value.toLowerCase}.jar"
     val classpathString = s"$libs/*:$jarTarget"
     new Dockerfile {
-      from("cogniteev/oracle-java:java8")
+      from("anapsix/alpine-java")
       run("mkdir", app, etc, data, log)
       workDir(app)
       classpath.files.foreach { depFile =>
