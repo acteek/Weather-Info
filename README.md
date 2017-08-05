@@ -44,6 +44,7 @@ sbt dockerBuildAndPush
 
 ```bash
 
+docker pull acteek/weather-info
 docker run -p {port}:{port} acteek/weather-info:latest
 
 ```
