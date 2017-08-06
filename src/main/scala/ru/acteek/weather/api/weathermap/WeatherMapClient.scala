@@ -14,6 +14,7 @@ import ru.acteek.weather.conf.ApiConfig
 import ru.acteek.weather.conf.ApplicationConfig._
 import ru.acteek.weather.storage.data.{CityMetrics, Metrics}
 import scala.concurrent.{ExecutionContext, Future}
+import  ru.acteek.weather.storage.Utils.WindDirectionByDegrees
 
 
 object WeatherMapClient {
@@ -60,8 +61,9 @@ class WeatherMapClient(apiConfig: ApiConfig)
     val city = (json \ "city").extract[City]
 
     val metricsByDate = (json \ "list").extract[List[RowMetrics]].flatMap { m =>
+      val deg = WindDirectionByDegrees(m.wind.deg)
       val metrics = Metrics(
-        m.main.temp, m.main.temp_min, m.main.temp_max, m.main.humidity, m.wind.speed, m.wind.deg)
+        m.main.temp, m.main.temp_min, m.main.temp_max, m.main.humidity, m.wind.speed, deg)
       Map(m.dt_txt -> metrics)
     }
       logger.debug("Metrics => {}", metricsByDate)

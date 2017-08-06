@@ -2,24 +2,23 @@ import Vue from 'vue'
 import VueCharts from 'vue-chartjs'
 
 
-/*
-* Скорее всего это график не совсем достоверен.
-* Не совсем понятно как построить розк ветром по имеющимся данным
-*
-*/
 
 export default Vue.component('weed-deg-chart', {
   extends: VueCharts.Radar,
+  data: function(){ return {
+    directions: ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W','WNW', 'NW', 'NNW']
+  }},
   computed: {
-    labels() { return ['N','NNE', 'NE', 'ENE',  'E', 'ESE', 'SE', 'SSE',  'S',  'SSW','SW', 'WSW', 'W','WNW','NW' , 'NNW']},
+    dataValues() { },
+    labels() { return this.directions},
     datasets(){
     return [{
           fill: true,
-          label: 'Напрввление ветра',
+          label: 'Направление ветра',
           backgroundColor: 'rgba(212, 132, 28, 0.2)',
           borderColor: 'rgba(212, 132, 28, 1)',
           borderWidth: 1 ,
-          data: this.$root.weedDegData
+          data: this.values()
         }]
     }
   },
@@ -45,7 +44,19 @@ export default Vue.component('weed-deg-chart', {
                labels: this.labels,
                datasets: this.datasets
           }, {responsive: true, maintainAspectRatio: false})
- }},
+    },
+    counts: function(direction) {
+      return this.$root.weedDegData.reduce((acc, elem) => {
+     	if(elem === direction){return acc +1}
+     	else {return acc}
+     	},0)
+     },
+    values: function(){
+     return this.directions.map((dr)=>{
+       return this.counts(dr)
+       })
+    }
+ },
 
   mounted () {
      this.render()

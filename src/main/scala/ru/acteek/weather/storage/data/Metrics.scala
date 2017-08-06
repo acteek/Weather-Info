@@ -6,5 +6,5 @@ case class Metrics(
                     tempMax: Double,
                     humidity: Double,
                     windSpeed: Double,
-                    windDeg: Int
+                    windDeg: String
                   )
