@@ -43,17 +43,24 @@ class StorageImpl(val apiClient: ApiClient)(implicit system: ActorSystem) extend
     }
   }
 
+  private def snipDate(metrics: List[(String, Metrics)]) =
+    metrics.map { case (date, m) =>
+      (date.drop(8).dropRight(3), m)
+    }
+
   def getMetrics(cityName: String, dateFromString: String, dateToString: String): Future[ResponseJson] = {
 
     cache.getIfPresent(cityName) match {
       case Some(city) =>
         val metrics = filterMetric(city, dateFromString, dateToString)
-        Future.successful(renderJson(metrics))
+        val snippedMetric = snipDate(metrics)
+        Future.successful(renderJson(snippedMetric))
       case None =>
         apiClient.getMetricByCityName(cityName).map { city =>
           cache.put(cityName, city)
           val metrics = filterMetric(city, dateFromString, dateToString)
-          renderJson(metrics)
+          val snippedMetric = snipDate(metrics)
+          renderJson(snippedMetric)
         }
     }
   }
