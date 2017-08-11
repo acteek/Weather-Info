@@ -1,6 +1,6 @@
 
 lazy val projectName = "Weather-Info"
-lazy val projectVersion = "0.0.4"
+lazy val projectVersion = "0.0.5"
 lazy val dhNamespace = "acteek"
 
 scalaVersion := "2.11.7"
