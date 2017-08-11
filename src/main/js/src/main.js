@@ -1,10 +1,11 @@
 import Vue from 'vue'
-import 'jquery';
-import Tether from 'tether';
+import 'jquery'
+import Popper from 'popper.js'
+import Tether from 'tether'
 import 'bootstrap/dist/js/bootstrap'
-import VueResource from 'vue-resource';
-import moment from 'moment';
-import VueMomentJS from 'vue-momentjs';
+import VueResource from 'vue-resource'
+import moment from 'moment'
+import VueMomentJS from 'vue-momentjs'
 import './temperatureChart.js'
 import './humidityChart.js'
 import './windSpeedChart.js'
@@ -13,6 +14,7 @@ import './Statistic.js'
 import './StatisticTempChart.js'
 import {tmp, clearTempData} from './tempStorage.js'
 
+window.Popper = Popper
 
 Vue.use(VueResource);
 Vue.use(VueMomentJS, moment);

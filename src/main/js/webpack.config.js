@@ -58,7 +58,8 @@ if (process.env.NODE_ENV === 'production') {
     $: "jquery",
     jQuery: "jquery",
     "window.jQuery": "jquery",
-    "Tether": 'tether'
+    "Tether": 'tether',
+    Popper: ['popper.js', 'default']
     })
   ]).concat([
     new webpack.DefinePlugin({

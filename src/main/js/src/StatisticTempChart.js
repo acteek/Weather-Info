@@ -43,6 +43,7 @@ export default Vue.component('stat-temp-chart', {
       chart.update()
     },
     labels: function (newData) {
+      this.getMetrics()
       let chart = this._chart
       chart.data.datasets = this.datasets
       chart.data.labels = newData,
