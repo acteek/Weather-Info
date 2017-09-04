@@ -70,8 +70,8 @@ lazy val main = (project in file("."))
       cmd("java",
         "-Xms256m",
         "-Xmx256m",
-        "-Dlogger.file=/app/etc/resources/logback.xml",
-        "-Dconfig.file=/app/etc/resources/application.conf",
+        "-Dlogger.file=/app/etc/resources/prod_conf/logback.xml",
+        "-Dconfig.file=/app/etc/resources/prod_conf/application.conf",
         "-cp", classpathString, mainclass)
     }
   }
