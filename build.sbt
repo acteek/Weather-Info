@@ -18,6 +18,8 @@ lazy val main = (project in file("."))
       libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % "3.0.0",
       "com.typesafe.akka" %% "akka-http" % "10.0.6",
+      "com.typesafe.akka" %% "akka-http-testkit" % "10.0.10" % Test,
+      "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0" % Test,
       "com.typesafe" % "config" % "1.3.1",
       "ch.qos.logback" % "logback-classic" % "1.1.7",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",

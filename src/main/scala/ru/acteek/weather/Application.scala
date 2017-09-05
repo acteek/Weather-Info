@@ -1,13 +1,14 @@
 package ru.acteek.weather
 
 import akka.actor.ActorSystem
+import akka.http.javadsl.server.Route
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import com.typesafe.scalalogging.StrictLogging
 import ru.acteek.weather.api.weathermap.WeatherMapClient
 import ru.acteek.weather.conf.ApplicationConfig._
-import ru.acteek.weather.storage.StorageImpl
+import ru.acteek.weather.storage.{Storage, StorageImpl}
 
 
 object Application extends App with StrictLogging {
@@ -19,7 +20,7 @@ object Application extends App with StrictLogging {
   val api = WeatherMapClient.fromConfig()
   val storage = new StorageImpl(api)
 
-  val route =
+  def route(storage: Storage) =
     get {
       path("") {
         getFromResource("ui/index.html")
@@ -44,7 +45,8 @@ object Application extends App with StrictLogging {
         }
     }
 
-  Http().bindAndHandle(route, "0.0.0.0", port)
+
+  Http().bindAndHandle(route(storage), "0.0.0.0", port)
   logger.info(s"Server start at http://0.0.0.0:$port/")
 
 }
