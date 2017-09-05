@@ -25,7 +25,7 @@ class StorageImpl(val apiClient: ApiClient)(implicit system: ActorSystem) extend
       .maximumSize(1000)
       .build[String, CityMetrics]()
 
-  def renderJson(metrics: List[(String, Metrics)]): ResponseJson = {
+  private def renderJson(metrics: List[(String, Metrics)]): ResponseJson = {
     implicit val formats = Serialization.formats(NoTypeHints)
     val ser = write(metrics)
     val outJson = compact(render(parse(ser).snakizeKeys))

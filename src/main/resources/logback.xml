@@ -6,9 +6,9 @@
     </appender>
     <logger name="org.apache" level="WARN"/>
     <logger name="com.ning.http.client.providers.netty" level="INFO"/>
-    <logger name="ru.acteek.weather" level="INFO"/>
+    <logger name="ru.acteek.weather" level="DEBUG"/>
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

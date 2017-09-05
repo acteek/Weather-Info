@@ -8,7 +8,10 @@ import scala.io.Source.fromFile
 class ApiSpec extends BaseSpec with ScalatestRouteTest {
 
   import Application.route
+
   val testRoute = route(storageMock)
+  val requestMetrics =
+    s"/metrics?city=${data.city}&date-from=${data.dateFrom}&date-to=${data.dateTo}"
 
   "Http Api" when {
     "get root request " should {
@@ -52,13 +55,23 @@ class ApiSpec extends BaseSpec with ScalatestRouteTest {
     }
     "get metrics request" should {
       "return status 200" in {
-        val request = "/metrics?city=Moscow&date-from=2017-09-05T19:00&date-to=2017-09-05T20:00"
-        Get(request) ~> testRoute ~> check {
+        Get(requestMetrics) ~> testRoute ~> check {
           status shouldBe StatusCodes.OK
         }
       }
-
+      "return valid response" in {
+        Get(requestMetrics) ~> testRoute ~> check {
+          responseAs[String] shouldBe apiValidJson
+        }
+      }
     }
-
+    //    "get metrics no-valid request" should {
+    //      "return status 500" in {
+    //        Get(s"/metrics?city=${data.city}") ~> testRoute ~> check {
+    //          status shouldBe StatusCodes.InternalServerError
+    //          responseAs[String] shouldBe "Missing parameter date-to"
+    //        }
+    //      }
+    //    }
   }
 }
