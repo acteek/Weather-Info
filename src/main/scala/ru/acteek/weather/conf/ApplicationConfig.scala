@@ -10,3 +10,5 @@ object ApplicationConfig {
   val port: Int = conf.getInt("http.port")
   val apiConfig: Config = conf.getConfig("api.openWeatherMap")
 }
+
+

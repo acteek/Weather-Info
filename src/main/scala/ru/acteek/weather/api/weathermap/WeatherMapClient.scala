@@ -11,18 +11,17 @@ import org.json4s.jackson.JsonMethods._
 import ru.acteek.weather.api.weathermap.data.{City, RowMetrics}
 import ru.acteek.weather.api.ApiClient
 import ru.acteek.weather.conf.ApiConfig
-import ru.acteek.weather.conf.ApplicationConfig._
 import ru.acteek.weather.storage.data.{CityMetrics, Metrics}
 import scala.concurrent.{ExecutionContext, Future}
 import  ru.acteek.weather.Utils.windDirectionByDegrees
-
+import com.typesafe.config.Config
 
 object WeatherMapClient {
-  def fromConfig()(implicit system: ActorSystem, materializer: ActorMaterializer): WeatherMapClient = {
-    val url = apiConfig.getString("url")
-    val version = apiConfig.getString("version")
-    val method = apiConfig.getString("method")
-    val token = apiConfig.getString("token")
+  def fromConfig(config: Config)(implicit system: ActorSystem, materializer: ActorMaterializer): WeatherMapClient = {
+    val url = config.getString("url")
+    val version = config.getString("version")
+    val method = config.getString("method")
+    val token = config.getString("token")
     new WeatherMapClient(
       ApiConfig(url, version, method, token)
     )

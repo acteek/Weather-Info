@@ -1,7 +1,6 @@
 package ru.acteek.weather
 
 import akka.actor.ActorSystem
-import akka.http.javadsl.server.Route
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
@@ -17,7 +16,7 @@ object Application extends App with StrictLogging {
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
 
-  val api = WeatherMapClient.fromConfig()
+  val api = WeatherMapClient.fromConfig(apiConfig)
   val storage = new StorageImpl(api)
 
   def route(storage: Storage) =

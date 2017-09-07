@@ -46,6 +46,6 @@ abstract class BaseSpec extends WordSpec
 
   (apiClientMock.getMetricByCityName _)
     .expects(reqData.city)
-    .returning(Future.successful(apiClientResp)) anyNumberOfTimes()
+    .returning(Future.successful(apiClientResp)) noMoreThanOnce()
 }
 
