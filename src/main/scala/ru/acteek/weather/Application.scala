@@ -16,7 +16,7 @@ object Application extends App with StrictLogging {
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
 
-  val api = WeatherMapClient.fromConfig(apiConfig)
+  val api = WeatherMapClient.fromConfig()
   val storage = new StorageImpl(api)
 
   def route(storage: Storage) =
