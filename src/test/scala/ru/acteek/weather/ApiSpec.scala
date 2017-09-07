@@ -1,7 +1,7 @@
 package ru.acteek.weather
 
 import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.MissingQueryParamRejection
+import akka.http.scaladsl.server.{MissingQueryParamRejection, Route}
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 
 import scala.io.Source.fromFile
@@ -10,9 +10,9 @@ class ApiSpec extends BaseSpec with ScalatestRouteTest {
 
   import Application.route
 
-  val testRoute = route(storageMock)
+  val testRoute: Route = route(storageMock)
   val requestMetrics =
-    s"/metrics?city=${data.city}&date-from=${data.dateFrom}&date-to=${data.dateTo}"
+    s"/metrics?city=${reqData.city}&date-from=${reqData.dateFrom}&date-to=${reqData.dateTo}"
 
   "Http Api" when {
     "get root request " should {
@@ -62,7 +62,7 @@ class ApiSpec extends BaseSpec with ScalatestRouteTest {
       }
       "return valid response" in {
         Get(requestMetrics) ~> testRoute ~> check {
-          responseAs[String] shouldBe apiValidJson
+          responseAs[String] shouldBe apiJson
         }
       }
     }
@@ -75,14 +75,14 @@ class ApiSpec extends BaseSpec with ScalatestRouteTest {
     }
     "get metrics without param date-from" should {
       "rejection missing param date-from" in {
-        Get(s"/metrics?city=${data.city}") ~> testRoute ~> check {
+        Get(s"/metrics?city=${reqData.city}") ~> testRoute ~> check {
           rejection shouldBe MissingQueryParamRejection("date-from")
         }
       }
     }
     "get metrics without param date-to" should {
       "rejection missing param date-to" in {
-        Get(s"/metrics?city=${data.city}&date-from=${data.dateFrom}") ~> testRoute ~> check {
+        Get(s"/metrics?city=${reqData.city}&date-from=${reqData.dateFrom}") ~> testRoute ~> check {
           rejection shouldBe MissingQueryParamRejection("date-to")
         }
       }

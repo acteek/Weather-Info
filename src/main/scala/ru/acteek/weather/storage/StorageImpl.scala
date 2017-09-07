@@ -11,14 +11,14 @@ import org.json4s.jackson.JsonMethods._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import ru.acteek.weather.storage.Utils._
+import ru.acteek.weather.Utils._
 
 
 class StorageImpl(val apiClient: ApiClient)(implicit system: ActorSystem) extends Storage {
 
-  implicit val executionContext: ExecutionContext = system.dispatcher
+  private implicit val executionContext: ExecutionContext = system.dispatcher
 
-  val cache: Cache[String, CityMetrics] =
+  private val cache: Cache[String, CityMetrics] =
     Scaffeine()
       .recordStats()
       .expireAfterWrite(20.minutes)
@@ -45,10 +45,11 @@ class StorageImpl(val apiClient: ApiClient)(implicit system: ActorSystem) extend
 
   private def snipDate(metrics: List[(String, Metrics)]) =
     metrics.map { case (date, m) =>
-      (date.drop(8).dropRight(3), m)
+      (normalizeLabel(date), m)
     }
 
   def getMetrics(cityName: String, dateFromString: String, dateToString: String): Future[ResponseJson] = {
+    require(cityName.trim.nonEmpty, "CityName should no be empty")
 
     cache.getIfPresent(cityName) match {
       case Some(city) =>
