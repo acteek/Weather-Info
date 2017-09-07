@@ -1,8 +1,9 @@
 package ru.acteek.weather
 
 import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.server.MissingQueryParamRejection
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import org.scalamock.scalatest.MockFactory
+
 import scala.io.Source.fromFile
 
 class ApiSpec extends BaseSpec with ScalatestRouteTest {
@@ -65,13 +66,26 @@ class ApiSpec extends BaseSpec with ScalatestRouteTest {
         }
       }
     }
-    //    "get metrics no-valid request" should {
-    //      "return status 500" in {
-    //        Get(s"/metrics?city=${data.city}") ~> testRoute ~> check {
-    //          status shouldBe StatusCodes.InternalServerError
-    //          responseAs[String] shouldBe "Missing parameter date-to"
-    //        }
-    //      }
-    //    }
+    "get metrics without param city" should {
+      "rejection missing param city" in {
+        Get(s"/metrics") ~> testRoute ~> check {
+          rejection shouldBe MissingQueryParamRejection("city")
+        }
+      }
+    }
+    "get metrics without param date-from" should {
+      "rejection missing param date-from" in {
+        Get(s"/metrics?city=${data.city}") ~> testRoute ~> check {
+          rejection shouldBe MissingQueryParamRejection("date-from")
+        }
+      }
+    }
+    "get metrics without param date-to" should {
+      "rejection missing param date-to" in {
+        Get(s"/metrics?city=${data.city}&date-from=${data.dateFrom}") ~> testRoute ~> check {
+          rejection shouldBe MissingQueryParamRejection("date-to")
+        }
+      }
+    }
   }
 }
