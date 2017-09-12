@@ -2,7 +2,7 @@ package ru.acteek.weather
 
 import akka.actor.ActorSystem
 import ru.acteek.weather.storage.StorageImpl
-
+import ru.acteek.weather.utils.TestData._
 
 
 
@@ -14,13 +14,13 @@ class StorageSpec extends BaseSpec {
   "Storage" when {
     "called getMetrics" should {
       "return valid json response" in {
-        val response = storage.getMetrics(reqData.city, reqData.dateFrom, reqData.dateTo)
+        val response = storage.getMetrics(reqData.cityName, reqData.dateFrom, reqData.dateTo)
         whenReady(response) { json =>
           json shouldBe apiJson
         }
       }
       "apply correct filter" in {
-        val response = storage.getMetrics(reqData.city, reqData.dateTo, reqData.dateTo)
+        val response = storage.getMetrics(reqData.cityName, reqData.dateTo, reqData.dateTo)
         whenReady(response) { json =>
           json shouldBe "[]"
         }
@@ -28,7 +28,7 @@ class StorageSpec extends BaseSpec {
     }
     "called getMetrics no valid date" should {
       "return exception" in {
-        val response = storage.getMetrics(reqData.city, "2017-09-000:00", "")
+        val response = storage.getMetrics(reqData.cityName, "2017-09-000:00", "")
         whenReady(response.failed) { ex =>
           ex shouldBe an[IllegalArgumentException]
           ex.getMessage shouldBe """Invalid format: "2017-09-000:00" is malformed at ":00""""

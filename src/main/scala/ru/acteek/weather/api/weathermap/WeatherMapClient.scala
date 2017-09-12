@@ -13,7 +13,7 @@ import ru.acteek.weather.api.ApiClient
 import ru.acteek.weather.conf.ApiConfig
 import ru.acteek.weather.storage.data.{CityMetrics, Metrics}
 import scala.concurrent.{ExecutionContext, Future}
-import ru.acteek.weather.Utils.windDirectionByDegrees
+import ru.acteek.weather.utils.Utils.windDirectionByDegrees
 import ru.acteek.weather.conf.ApplicationConfig._
 
 object WeatherMapClient {
@@ -44,7 +44,7 @@ class WeatherMapClient(apiConfig: ApiConfig)
     uri = (name, id) match {
       case (Some(n), None) =>
         baseUri.withQuery(
-          Query(Map("q" -> n.trim, "APPID" -> token, "units" -> "metric", "lang" -> "ru"))
+          Query(Map("q" -> n.trim, "APPID" -> token, "units" -> "metric", "lang" -> "ru", "cnt" ->"1"))
         )
       case (None, Some(i)) =>
         baseUri.withQuery(

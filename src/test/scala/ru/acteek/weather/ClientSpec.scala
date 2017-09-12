@@ -4,19 +4,18 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import ru.acteek.weather.api.weathermap.WeatherMapClient
 import ru.acteek.weather.conf.ApiConfig
+import org.scalatest.BeforeAndAfterAll
+import ru.acteek.weather.utils.TestData._
 import ru.acteek.weather.utils.WeatherApiMock
-import java.util.concurrent.Executors
 
+class ClientSpec extends BaseSpec with BeforeAndAfterAll {
 
-class ClientSpec extends BaseSpec {
+  override def beforeAll(): Unit = WeatherApiMock.start()
+
+  override def afterAll(): Unit = WeatherApiMock.stop()
 
   implicit val system = ActorSystem("testing")
   implicit val materializer = ActorMaterializer()
-
-//  private val executor = Executors.newSingleThreadExecutor()
-//  executor.submit(WeatherApiMock)
-//  Thread.sleep(2000)
-
   val conf = ApiConfig("http://0.0.0.0:9091/data", "2.5", "forecast", "b88d219056735117545d234d3cbc0714")
   val client = new WeatherMapClient(conf)
 
@@ -24,10 +23,9 @@ class ClientSpec extends BaseSpec {
   "WeatherMapClient" when {
     "called  " should {
       "return valid response" in {
-       val response = client.getMetricByCityName(reqData.city)
-        whenReady(response) { r =>
-//          r.metrics should not be empty
-        r
+        val response = client.getMetricByCityName(reqData.cityName)
+        whenReady(response) { data =>
+          data shouldBe apiClientResp
         }
       }
     }

@@ -11,7 +11,7 @@ import org.json4s.jackson.JsonMethods._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import ru.acteek.weather.Utils._
+import ru.acteek.weather.utils.Utils._
 
 
 class StorageImpl(val apiClient: ApiClient)(implicit system: ActorSystem) extends Storage {

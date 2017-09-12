@@ -1,4 +1,4 @@
-package ru.acteek.weather
+package ru.acteek.weather.utils
 
 import org.joda.time.format._
 
