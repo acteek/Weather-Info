@@ -21,9 +21,17 @@ class ClientSpec extends BaseSpec with BeforeAndAfterAll {
 
 
   "WeatherMapClient" when {
-    "called  " should {
+    "called getMetricByCityName" should {
       "return valid response" in {
         val response = client.getMetricByCityName(reqData.cityName)
+        whenReady(response) { data =>
+          data shouldBe apiClientResp
+        }
+      }
+    }
+    "called getMetricByCityId" should {
+      "return valid response" in {
+        val response = client.getMetricByCityId(respData.cityId)
         whenReady(response) { data =>
           data shouldBe apiClientResp
         }

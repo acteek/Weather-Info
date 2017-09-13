@@ -3,7 +3,7 @@ lazy val projectName = "Weather-Info"
 lazy val projectVersion = "0.0.5"
 lazy val dhNamespace = "acteek"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.11"
 
 npmWorkingDir := "src/main/js"
 npmCompileCommands := "run build"
@@ -16,18 +16,19 @@ lazy val main = (project in file("."))
     name := projectName,
     version := projectVersion,
       libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % "3.0.0",
-      "com.typesafe.akka" %% "akka-http" % "10.0.6",
-      "com.typesafe.akka" %% "akka-http-testkit" % "10.0.10" % Test,
-      "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0" % Test,
-      "com.typesafe" % "config" % "1.3.1",
-      "ch.qos.logback" % "logback-classic" % "1.1.7",
-      "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",
-      "joda-time" % "joda-time" % "2.9.9",
-      "org.joda" % "joda-convert" % "1.8.2",
-      "com.github.blemale" % "scaffeine_2.11" % "2.2.0",
-      "org.json4s" % "json4s-jackson_2.11" % "3.3.0",
-      "com.typesafe.akka" %% "akka-slf4j" % "2.4.19"
+      "org.scalatest"              %% "scalatest"                   % "3.0.0",
+      "com.typesafe.akka"          %% "akka-http"                   % "10.0.6",
+      "com.typesafe.akka"          %% "akka-http-testkit"           % "10.0.10" % Test,
+      "org.scalamock"              %% "scalamock-scalatest-support" % "3.6.0"   % Test,
+      "org.scalacheck"             %% "scalacheck"                  % "1.13.4"  % Test,
+      "com.typesafe"               % "config"                       % "1.3.1",
+      "ch.qos.logback"             % "logback-classic"              % "1.1.7",
+      "com.typesafe.scala-logging" %% "scala-logging"               % "3.4.0",
+      "joda-time"                  % "joda-time"                    % "2.9.9",
+      "org.joda"                   % "joda-convert"                 % "1.8.2",
+      "com.github.blemale"         % "scaffeine_2.11"               % "2.2.0",
+      "org.json4s"                 % "json4s-jackson_2.11"          % "3.3.0",
+      "com.typesafe.akka"          %% "akka-slf4j"                  % "2.4.19"
     )
   )
   .enablePlugins(DockerPlugin, Npm)

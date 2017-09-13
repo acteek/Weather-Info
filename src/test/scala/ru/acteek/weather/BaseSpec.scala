@@ -6,8 +6,6 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Span}
 import ru.acteek.weather.api.ApiClient
-import ru.acteek.weather.storage.data.{CityMetrics, Metrics}
-import ru.acteek.weather.utils.Utils._
 import ru.acteek.weather.utils.TestData._
 
 
@@ -20,7 +18,7 @@ abstract class BaseSpec extends WordSpec
   with ScalaFutures {
 
   implicit val config =
-    PatienceConfig(timeout = Span(500, Millis), interval = Span(10, Millis))
+    PatienceConfig(timeout = Span(2000, Millis), interval = Span(100, Millis))
 
   val pathStatic = "src/main/resources/ui"
   val storageMock = mock[Storage]
