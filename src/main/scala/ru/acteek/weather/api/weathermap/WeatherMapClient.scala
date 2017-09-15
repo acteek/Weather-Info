@@ -44,7 +44,7 @@ class WeatherMapClient(apiConfig: ApiConfig)
     uri = (name, id) match {
       case (Some(n), None) =>
         baseUri.withQuery(
-          Query(Map("q" -> n.trim, "APPID" -> token, "units" -> "metric", "lang" -> "ru", "cnt" ->"1"))
+          Query(Map("q" -> n.trim, "APPID" -> token, "units" -> "metric", "lang" -> "ru"))
         )
       case (None, Some(i)) =>
         baseUri.withQuery(

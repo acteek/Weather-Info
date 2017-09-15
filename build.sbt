@@ -1,6 +1,6 @@
 
 lazy val projectName = "Weather-Info"
-lazy val projectVersion = "0.0.5"
+lazy val projectVersion = "0.0.7"
 lazy val dhNamespace = "acteek"
 
 scalaVersion := "2.11.11"
@@ -50,14 +50,13 @@ lazy val main = (project in file("."))
     val resoursespath = sourceDirectory.in(Compile, packageBin).value
     val app = "/app"
     val etc = s"$app/etc"
-    val data = s"$app/data"
     val log = s"$app/log"
     val libs = s"$app/libs"
     val jarTarget = s"$app/${name.value.toLowerCase}.jar"
     val classpathString = s"$libs/*:$jarTarget"
     new Dockerfile {
       from("anapsix/alpine-java")
-      run("mkdir", app, etc, data, log)
+      run("mkdir", app, etc, log)
       workDir(app)
       classpath.files.foreach { depFile =>
         val target = file(libs) / depFile.name
