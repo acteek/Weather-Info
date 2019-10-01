@@ -1,5 +1,5 @@
 
-# Weather-Info
+# Weather-Info [![Build Status](https://travis-ci.org/acteek/Weather-Info.svg?branch=master)](https://travis-ci.org/acteek/Weather-Info)
 
 Сервис предоставляет статистические данные о погоде. 
 Прогноз  можно получить с текущей даты и времени не более чем на 5 дней.
