@@ -5,19 +5,20 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri.Query
 import akka.http.scaladsl.model.{HttpRequest, Uri}
 import akka.http.scaladsl.unmarshalling.Unmarshal
-import akka.stream.ActorMaterializer
+import akka.stream.SystemMaterializer
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 import ru.acteek.weather.api.weathermap.data.{City, RowMetrics}
 import ru.acteek.weather.api.ApiClient
 import ru.acteek.weather.conf.ApiConfig
 import ru.acteek.weather.storage.data.{CityMetrics, Metrics}
+
 import scala.concurrent.{ExecutionContext, Future}
 import ru.acteek.weather.utils.Utils.windDirectionByDegrees
 import ru.acteek.weather.conf.ApplicationConfig._
 
 object WeatherMapClient {
-  def fromConfig()(implicit system: ActorSystem, materializer: ActorMaterializer): WeatherMapClient = {
+  def fromConfig()(implicit system: ActorSystem): WeatherMapClient = {
     val url = apiConfig.getString("url")
     val version = apiConfig.getString("version")
     val method = apiConfig.getString("method")
@@ -28,14 +29,11 @@ object WeatherMapClient {
   }
 }
 
-class WeatherMapClient(apiConfig: ApiConfig)
-                      (implicit system: ActorSystem,
-                       materializer: ActorMaterializer) extends ApiClient {
-
-
+class WeatherMapClient(apiConfig: ApiConfig)(implicit system: ActorSystem) extends ApiClient {
   import apiConfig._
 
   implicit val executionContext: ExecutionContext = system.dispatcher
+  implicit val materializer =  SystemMaterializer(system).materializer
 
   private val http = Http()
   private val baseUri: Uri = Uri(s"$url/$version/$method")

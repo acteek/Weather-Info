@@ -1,9 +1,8 @@
 language: scala
 
 scala:
-  - 2.11.11
+  - 2.13.1
 
 script:
   - sbt clean
-  - sbt 'npm install'
-  - sbt compile test
+  - sbt compile
