@@ -1,9 +1,9 @@
 
-lazy val projectName = "Weather-Info"
+lazy val projectName = "weather-info"
 lazy val projectVersion = "0.0.7"
 lazy val dhNamespace = "acteek"
 
-scalaVersion := "2.13.1"
+scalaVersion := "2.13.2"
 
 //npmWorkingDir := "src/main/js"
 //npmCompileCommands := "run build"
