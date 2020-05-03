@@ -1,9 +1,11 @@
-
-lazy val projectName = "weather-info"
+lazy val projectName    = "weather-info"
 lazy val projectVersion = "0.0.7"
-lazy val dhNamespace = "acteek"
+lazy val dhNamespace    = "acteek"
 
 scalaVersion := "2.13.2"
+
+lazy val http4sVersion = "0.21.4"
+lazy val circeVersion  = "0.13.0"
 
 //npmWorkingDir := "src/main/js"
 //npmCompileCommands := "run build"
@@ -12,27 +14,58 @@ scalaVersion := "2.13.2"
 
 lazy val main = (project in file("."))
   .settings(
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
-    name := projectName,
-    version := projectVersion,
-      libraryDependencies ++= Seq(
+      scalacOptions ++= Seq(
+        "-encoding"
+      , "UTF-8"
+      , "-deprecation"
+      , "-explaintypes"
+      , "-unchecked"
+      , "-feature"
+      , "-language:higherKinds"
+      , "-language:existentials"
+      , "-language:implicitConversions"
+      , "-Xlint:stars-align"
+      , "-Xsource:2.13"
+      , "-Ywarn-dead-code"
+      , "-Ywarn-unused:imports"
+      , "-Ypatmat-exhaust-depth"
+      , "40"
+      , "-opt:l:method"
+      , "-Ymacro-annotations"
+    )
+    , name := projectName
+    , version := projectVersion
+    , libraryDependencies ++= Seq(
+        "com.github.blemale"         %% "scaffeine"           % "3.1.0"
+      , "org.scalatest"              %% "scalatest"           % "3.1.0" % Test
+      , "org.scalacheck"             %% "scalacheck"          % "1.14.3" % Test
 
-       "com.github.blemale"          %% "scaffeine"                   % "3.1.0",
-       "org.scalatest"               %% "scalatest"                   % "3.1.0"   % Test,
-       "org.scalacheck"              %% "scalacheck"                  % "1.14.3"  % Test,
-       "com.typesafe.akka"           %% "akka-http-testkit"           % "10.1.11" % Test,
-       "org.json4s"                  %% "json4s-jackson"              % "3.6.7",
-       "com.typesafe.scala-logging"  %% "scala-logging"               % "3.9.2",
-       "com.typesafe.akka"           %% "akka-slf4j"                  % "2.6.1",
-       "com.typesafe.akka"           %% "akka-stream"                 % "2.6.1",
-       "com.typesafe.akka"           %% "akka-http"                   % "10.1.8",
-       "joda-time"                    % "joda-time"                   % "2.10.5",
-       "org.joda"                     % "joda-convert"                % "2.2.1",
-       "com.typesafe"                 % "config"                      % "1.4.0",
-       "ch.qos.logback"               % "logback-classic"             % "1.2.3"
+      , "com.typesafe.scala-logging" %% "scala-logging"       % "3.9.2"
+      , "joda-time"                  % "joda-time"            % "2.10.5"
+      , "org.joda"                   % "joda-convert"         % "2.2.1"
+      , "com.typesafe"               % "config"               % "1.4.0"
+      , "ch.qos.logback"             % "logback-classic"      % "1.2.3"
 
-    //Don't support for 2.13
-    //      "org.scalamock"              %% "scalamock-scalatest-support" % "3.6.0"   % Test,
+      , "io.circe"                   %% "circe-core"          % circeVersion
+      , "io.circe"                   %% "circe-generic"       % circeVersion
+      , "io.circe"                   %% "circe-parser"        % circeVersion
+
+      , "org.http4s"                 %% "http4s-core"         % http4sVersion
+      , "org.http4s"                 %% "http4s-server"       % http4sVersion
+      , "org.http4s"                 %% "http4s-client"       % http4sVersion
+      , "org.http4s"                 %% "http4s-circe"        % http4sVersion
+      , "org.http4s"                 %% "http4s-dsl"          % http4sVersion
+      , "org.http4s"                 %% "http4s-blaze-server" % http4sVersion
+      , "org.http4s"                 %% "http4s-blaze-client" % http4sVersion
+
+      , "com.github.pureconfig"      %% "pureconfig"          % "0.12.3"
+      , "org.typelevel"              %% "cats-core"           % "2.1.1"
+      , "org.typelevel"              %% "cats-effect"         % "2.1.3"
+      , "co.fs2"                     %% "fs2-core"            % "2.3.0"
+      , "co.fs2"                     %% "fs2-io"              % "2.3.0"
+
+      //Don't support for 2.13
+      //      "org.scalamock"              %% "scalamock-scalatest-support" % "3.6.0"   % Test,
     )
   )
   .enablePlugins()

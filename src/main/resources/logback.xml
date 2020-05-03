@@ -1,15 +1,29 @@
-<configuration scan="true">
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+<configuration scan="true" scanPeriod="20 seconds">
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/server.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log/archive/server_%d{yyyy-MM,aux}/%d-%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>365</maxHistory>
+        </rollingPolicy>
+        <withJansi>true</withJansi>
         <encoder>
-            <pattern>%yellow(%d{dd/MMM/YYYY HH:mm:ss.SSS}) %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
+            <charset>UTF-8</charset>
+            <pattern>
+                %yellow(%d{dd/MMM/YYYY HH:mm:ss.SSS}) %highlight(%-5level) %cyan(%logger{36}) - %msg%n
+            </pattern>
         </encoder>
     </appender>
+
     <logger name="org.apache" level="WARN"/>
     <logger name="com.ning.http.client.providers.netty" level="INFO"/>
     <logger name="ru.acteek.weather" level="INFO"/>
 
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>
 
