@@ -7,12 +7,9 @@
 export var tmp = {
    labels: [],
    tempData: [],
-   tempMinData: [],
-   tempMaxData: [],
    humData: [],
    weedSpeedData: [],
    weedDegData: [],
-   statTempData: []
 }
 
 export function clearTempData() {

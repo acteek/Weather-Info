@@ -16,22 +16,6 @@ export default Vue.component('temp-chart', {
           borderWidth: 1 ,
           data: this.$root.tempData
         },
-        {
-          fill: true,
-          label: 'Min отклонение',
-          backgroundColor: 'rgba(41, 194, 168, 0.1)',
-          borderColor: 'rgba(41, 194, 168, 1)',
-          borderWidth: 1 ,
-          data: this.$root.tempMinData
-        },
-        {
-          fill: true,
-          label: 'Max отклонение',
-          backgroundColor: 'rgba(222, 222, 49, 0.1)',
-          borderColor: 'rgba(222, 222, 49, 1)',
-          borderWidth: 1 ,
-          data: this.$root.tempMaxData
-        }
      ]
     }
   },

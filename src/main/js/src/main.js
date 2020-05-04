@@ -10,8 +10,6 @@ import './temperatureChart.js'
 import './humidityChart.js'
 import './windSpeedChart.js'
 import './windDegChart.js'
-import './Statistic.js'
-import './StatisticTempChart.js'
 import {tmp, clearTempData} from './tempStorage.js'
 
 window.Popper = Popper
@@ -31,8 +29,6 @@ var vm = new Vue({
     dateTo: this.$moment(currentDate).add(3,'days').format(df),
     labels: [],
     tempData: [],
-    tempMaxData: [],
-    tempMinData: [],
     humData: [],
     weedSpeedData: [],
     weedDegData: []
@@ -46,30 +42,24 @@ var vm = new Vue({
     }
   },
   methods: {
-//TODO Можно отрефачить для использования в статистике
    getMetrics: function() {
      this.clearMetricData()
      clearTempData()
   	 this.$http.get('metrics?city='+this.searchCity+'&date-from='+this.dateFrom+'&date-to='+this.dateTo)
   	    .then(response => {
            response.body.forEach ( metric => {
-             for (var key in metric) {
-                tmp.labels.push(key)
-                tmp.tempData.push(metric[key].temp)
-                tmp.humData.push(metric[key].humidity)
-                tmp.weedSpeedData.push(metric[key].wind_speed)
-                tmp.tempMinData.push(metric[key].temp_min)
-                tmp.tempMaxData.push(metric[key].temp_max)
-                tmp.weedDegData.push(metric[key].wind_deg)
-             }
+              var label = moment.unix(metric.time).format('MMM Do, HH:mm')
+                tmp.labels.push(label)
+                tmp.tempData.push(metric.temp)
+                tmp.humData.push(metric.humidity)
+                tmp.weedSpeedData.push(metric.windSpeed)
+                tmp.weedDegData.push(metric.windDirection)
            })
         })
       this.labels = tmp.labels
       this.tempData = tmp.tempData
       this.humData = tmp.humData
       this.weedSpeedData = tmp.weedSpeedData
-      this.tempMinData = tmp.tempMinData
-      this.tempMaxData = tmp.tempMaxData
       this.weedDegData = tmp.weedDegData
   	},
 
@@ -78,8 +68,6 @@ var vm = new Vue({
       this.tempData = []
       this.humData = []
       this.weedSpeedData = []
-      this.tempMaxData = []
-      this.tempMinData = []
       this.weedDegData = []
   	}
   },

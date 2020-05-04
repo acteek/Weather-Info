@@ -4,6 +4,8 @@ lazy val dhNamespace    = "acteek"
 
 scalaVersion := "2.13.2"
 
+fork := true
+
 lazy val http4sVersion = "0.21.4"
 lazy val circeVersion  = "0.13.0"
 
@@ -39,17 +41,14 @@ lazy val main = (project in file("."))
         "com.github.blemale"         %% "scaffeine"           % "3.1.0"
       , "org.scalatest"              %% "scalatest"           % "3.1.0" % Test
       , "org.scalacheck"             %% "scalacheck"          % "1.14.3" % Test
-
       , "com.typesafe.scala-logging" %% "scala-logging"       % "3.9.2"
       , "joda-time"                  % "joda-time"            % "2.10.5"
       , "org.joda"                   % "joda-convert"         % "2.2.1"
       , "com.typesafe"               % "config"               % "1.4.0"
       , "ch.qos.logback"             % "logback-classic"      % "1.2.3"
-
       , "io.circe"                   %% "circe-core"          % circeVersion
       , "io.circe"                   %% "circe-generic"       % circeVersion
       , "io.circe"                   %% "circe-parser"        % circeVersion
-
       , "org.http4s"                 %% "http4s-core"         % http4sVersion
       , "org.http4s"                 %% "http4s-server"       % http4sVersion
       , "org.http4s"                 %% "http4s-client"       % http4sVersion
@@ -57,7 +56,6 @@ lazy val main = (project in file("."))
       , "org.http4s"                 %% "http4s-dsl"          % http4sVersion
       , "org.http4s"                 %% "http4s-blaze-server" % http4sVersion
       , "org.http4s"                 %% "http4s-blaze-client" % http4sVersion
-
       , "com.github.pureconfig"      %% "pureconfig"          % "0.12.3"
       , "org.typelevel"              %% "cats-core"           % "2.1.1"
       , "org.typelevel"              %% "cats-effect"         % "2.1.3"

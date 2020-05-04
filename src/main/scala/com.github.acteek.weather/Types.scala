@@ -2,8 +2,6 @@ package com.github.acteek.weather
 
 import io.circe.generic.semiauto._
 import io.circe.{Decoder, Encoder}
-import io.circe.syntax._
-
 import scala.collection.SortedMap
 
 object Types {
@@ -14,29 +12,26 @@ object Types {
   case class Metrics(
         time: InstantSec
       , temp: Double
-      , tempMin: Double
-      , tempMax: Double
       , humidity: Double
       , windSpeed: Double
+      , windDirection: String
   )
   object Metrics {
     implicit val decoder: Decoder[Metrics] = Decoder.instance { c =>
       val main = c.downField("main")
       val wind = c.downField("wind")
       for {
-        time      <- c.get[InstantSec]("dt")
-        temp      <- main.get[Double]("temp")
-        tempMin   <- main.get[Double]("temp_min")
-        tempMax   <- main.get[Double]("temp_max")
-        humidity  <- main.get[Double]("humidity")
-        windSpeed <- wind.get[Double]("speed")
+        time       <- c.get[InstantSec]("dt")
+        temp       <- main.get[Double]("temp")
+        humidity   <- main.get[Double]("humidity")
+        windSpeed  <- wind.get[Double]("speed")
+        windDegNum <- wind.get[Double]("deg")
       } yield Metrics(
           time = time
         , temp = temp
-        , tempMin = tempMin
-        , tempMax = tempMax
         , humidity = humidity
         , windSpeed = windSpeed
+        , windDirection = Utils.windDirectionByDegrees(windDegNum)
       )
 
     }
@@ -58,7 +53,6 @@ object Types {
       } yield City(name, metricsByTime)
 
     }
-    implicit val encoder: Encoder[City] = Encoder.instance(_.metrics.asJson)
   }
 
 }

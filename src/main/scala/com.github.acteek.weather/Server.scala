@@ -1,9 +1,11 @@
 package com.github.acteek.weather
 
-import cats.effect.{ConcurrentEffect, ExitCode,  Timer}
+import cats.effect._
 import com.github.acteek.weather.Config.ServiceConf
-import org.http4s.HttpRoutes
+import org.http4s.{HttpRoutes, StaticFile}
 import org.http4s.dsl.Http4sDsl
+import io.circe.syntax._
+import cats.implicits._
 import org.http4s.implicits._
 import org.http4s.server.blaze._
 import fs2.Stream
@@ -15,36 +17,8 @@ trait Server[F[_]] {
 }
 
 object Server {
-//  def route(storage: Storage) =
-//    get {
-//      path("") {
-//        getFromResource("ui/index.html")
-//      } ~
-//        pathPrefix("css") {
-//          encodeResponse {
-//            getFromResourceDirectory("ui/css")
-//          }
-//        } ~
-//        pathPrefix("js") {
-//          encodeResponse {
-//            getFromResourceDirectory("ui/dist")
-//          }
-//        } ~
-//        path("metrics") {
-//          parameters("city".as[String], "date-from".as[String], "date-to".as[String]) { (city, dateFrom, dateTo) =>
-//            logger.info("Received  request with city=>[{}] dateFrom=>[{}] dateTo=>[{}]", city, dateFrom, dateTo)
-//            onSuccess(storage.getMetrics(city, dateFrom, dateTo)) { resp =>
-//              complete(resp)
-//            }
-//          }
-//        }
-//    }
-//
-//
-//  Http().bindAndHandle(route(storage), "0.0.0.0", port)
-//  logger.info(s"Server start at http://0.0.0.0:$port/")
 
-  def apply[F[_]: ConcurrentEffect: Timer](
+  def apply[F[_]: ConcurrentEffect: Timer: ContextShift](
         repository: Repository[F]
       , conf: ServiceConf
       , ex: ExecutionContext
@@ -53,8 +27,21 @@ object Server {
     private val service =
       HttpRoutes
         .of[F] {
-          case GET -> Root / "hello" / name =>
-            Ok(s"Hello, $name.")
+          case req @ GET -> Root / "metrics" =>
+            repository
+              .getMetricsByCity(req.params("city"), 0L, Long.MaxValue)
+              .flatMap(m => Ok(m.asJson.spaces2))
+
+          case GET -> Root =>
+            StaticFile
+              .fromResource("ui/index.html", Blocker.liftExecutionContext(ex))
+              .getOrElseF(NotFound())
+
+          case GET -> path =>
+            StaticFile
+              .fromResource(s"ui/$path", Blocker.liftExecutionContext(ex))
+              .getOrElseF(NotFound())
+
         }
         .orNotFound
 
@@ -62,6 +49,7 @@ object Server {
       BlazeServerBuilder[F](ex)
         .bindHttp(conf.port, "0.0.0.0")
         .withHttpApp(service)
+        .withoutBanner
         .serve
 
   }

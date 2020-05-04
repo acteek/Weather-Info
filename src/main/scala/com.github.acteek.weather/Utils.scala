@@ -10,8 +10,6 @@ object Utils {
   val frontTimeFormat: DateTimeFormatter = DateTimeFormat.forPattern(frontPattern)
   val backTimeFormat: DateTimeFormatter = DateTimeFormat.forPattern(backPattern)
 
-  def normalizeLabel(label: String): String = label.drop(8).dropRight(3)
-
   def windDirectionByDegrees(degrees: Double): String = degrees match {
     case deg if (11.25 <= deg) && (deg < 33.75) => "NNE"
     case deg if (33.75 <= deg) && (deg < 56.25) => "NE"
