@@ -7,7 +7,6 @@ import VueResource from 'vue-resource'
 import moment from 'moment'
 import VueMomentJS from 'vue-momentjs'
 import './metricsChart.js'
-import {tmp, clearTempData} from './tempStorage.js'
 
 window.Popper = Popper
 
