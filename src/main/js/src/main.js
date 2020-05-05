@@ -61,7 +61,6 @@ var vm = new Vue({
   methods: {
    getMetrics: function() {
      this.clearMetricData()
-     clearTempData()
   	 this.$http.get('metrics?city='+this.searchCity+'&date-from='+this.dateFrom+'&date-to='+this.dateTo)
   	    .then(response => {
            response.body.forEach ( metric => {
