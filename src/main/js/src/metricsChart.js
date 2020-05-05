@@ -2,19 +2,21 @@ import Vue from 'vue'
 import VueCharts from 'vue-chartjs'
 
 
-export default Vue.component('weed-speed-chart', {
+export default Vue.component('metrics-chart', {
   extends: VueCharts.Line,
+  props: ['labels', 'graph' ],
   computed: {
-    labels() { return this.$root.labels},
     datasets(){
-    return [{
+    return [
+        {
           fill: true,
-          label: 'Скорость ветра m/s',
-          backgroundColor: 'rgba(99, 132, 255, 0.2)',
-          borderColor: 'rgba(99, 123, 255, 1)',
+          label: this.graph.label,
+          backgroundColor: this.graph.color.background ,
+          borderColor: this.graph.color.border,
           borderWidth: 1 ,
-          data: this.$root.weedSpeedData
-        }]
+          data: this.graph.data
+        },
+     ]
     }
   },
 

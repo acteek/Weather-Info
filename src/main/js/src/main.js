@@ -6,10 +6,7 @@ import 'bootstrap/dist/js/bootstrap'
 import VueResource from 'vue-resource'
 import moment from 'moment'
 import VueMomentJS from 'vue-momentjs'
-import './temperatureChart.js'
-import './humidityChart.js'
-import './windSpeedChart.js'
-import './windDegChart.js'
+import './metricsChart.js'
 import {tmp, clearTempData} from './tempStorage.js'
 
 window.Popper = Popper
@@ -28,12 +25,33 @@ var vm = new Vue({
     dateFrom: currentDate,
     dateTo: this.$moment(currentDate).add(3,'days').format(df),
     labels: [],
-    tempData: [],
-    humData: [],
-    weedSpeedData: [],
-    weedDegData: []
+    tempGraph: {
+      label: 'Температура °С',
+      data:[],
+      color: {
+        background: 'rgba(255, 99, 132, 0.2)',
+        border: 'rgba(255, 60, 132, 1)',
+      }
+    },
+    humGraph: {
+      label: 'Влажность воздуха %',
+      data:[],
+      color: {
+        background: 'rgba(99, 255, 132, 0.2)',
+        border: 'rgba(99, 255, 132, 1)',
+      }
+    },
+    windGraph: {
+      label: 'Скорость ветра m/s',
+      data:[],
+      color: {
+        background: 'rgba(99, 132, 255, 0.2)',
+        border: 'rgba(99, 123, 255, 1)',
+      }
+    }
   }},
   computed: {
+
     dateMin() {
      return currentDate
     },
@@ -49,26 +67,19 @@ var vm = new Vue({
   	    .then(response => {
            response.body.forEach ( metric => {
               var label = moment.unix(metric.time).format('MMM Do, HH:mm')
-                tmp.labels.push(label)
-                tmp.tempData.push(metric.temp)
-                tmp.humData.push(metric.humidity)
-                tmp.weedSpeedData.push(metric.windSpeed)
-                tmp.weedDegData.push(metric.windDirection)
+              this.labels.push(label)
+              this.tempGraph.data.push(metric.temp)
+              this.humGraph.data.push(metric.humidity)
+              this.windGraph.data.push(metric.windSpeed)
            })
         })
-      this.labels = tmp.labels
-      this.tempData = tmp.tempData
-      this.humData = tmp.humData
-      this.weedSpeedData = tmp.weedSpeedData
-      this.weedDegData = tmp.weedDegData
   	},
 
   	clearMetricData: function() {
   	  this.labels = []
-      this.tempData = []
-      this.humData = []
-      this.weedSpeedData = []
-      this.weedDegData = []
+      this.tempGraph.data = []
+      this.humGraph.data = []
+      this.windGraph.data = []
   	}
   },
   created: function() {
