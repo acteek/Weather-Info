@@ -2,10 +2,10 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './src/main.js',
+  entry: './src/main/js/main.js',
   output: {
-    path: path.resolve(__dirname, '../resources/ui/dist/'),
-    publicPath: '../resources/ui/dist/',
+    path: path.resolve(__dirname, './src/main/resources/ui/dist/'),
+    publicPath: './src/main/resources/ui/dist/',
     filename: 'build.js'
   },
   module: {

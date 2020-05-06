@@ -8,10 +8,9 @@
 
 src/main/resources/ui/target/
 
-**/node_modules/
-/ui/build/bundle.js
+node_modules/
 /src/main/resources/ui/dist/
 /project/project/target/
 /project/target/
 /target/
-/src/main/js/package-lock.json
+package-lock.json

@@ -66,7 +66,7 @@ lazy val main = (project in file("."))
       //      "org.scalamock"              %% "scalamock-scalatest-support" % "3.6.0"   % Test,
     )
   )
-  .enablePlugins(DockerPlugin)
+  .enablePlugins(DockerPlugin, SbtWeb)
   .settings(docker := docker.dependsOn(Keys.`package`.in(Compile, packageBin)).value)
   .settings(
     imageNames in docker := Seq(
