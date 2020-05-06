@@ -1,3 +1,5 @@
+import scala.sys.process._
+
 lazy val projectName    = "weather-info"
 lazy val projectVersion = "0.0.7"
 lazy val dhNamespace    = "acteek"
@@ -9,10 +11,17 @@ fork := true
 lazy val http4sVersion = "0.21.4"
 lazy val circeVersion  = "0.13.0"
 
-//npmWorkingDir := "src/main/js"
-//npmCompileCommands := "run build"
-//npmTestCommands := "run test"
-//npmCleanCommands := "run clean"
+lazy val webBuild = taskKey[Unit]("Execute the npm build command to build the ui")
+webBuild := {
+  val s: TaskStreams = streams.value
+  if ("npm run build".! == 0 && "npm install".! == 0) {
+    s.log.success("web build successful!")
+  } else {
+    throw new IllegalStateException("web build failed!")
+  }
+
+}
+(compile in Compile) := ((compile in Compile) dependsOn webBuild).value
 
 lazy val main = (project in file("."))
   .settings(
@@ -61,53 +70,49 @@ lazy val main = (project in file("."))
       , "org.typelevel"              %% "cats-effect"         % "2.1.3"
       , "co.fs2"                     %% "fs2-core"            % "2.3.0"
       , "co.fs2"                     %% "fs2-io"              % "2.3.0"
-
-      //Don't support for 2.13
-      //      "org.scalamock"              %% "scalamock-scalatest-support" % "3.6.0"   % Test,
     )
   )
-  .enablePlugins(DockerPlugin, SbtWeb)
+  .enablePlugins(DockerPlugin)
   .settings(docker := docker.dependsOn(Keys.`package`.in(Compile, packageBin)).value)
   .settings(
-    imageNames in docker := Seq(
-      ImageName(s"$dhNamespace/${name.value.toLowerCase}:latest"),
-      ImageName(
-        repository = name.value.toLowerCase,
-        namespace = Some(dhNamespace),
-        tag = Some(version.value)
+      imageNames in docker := Seq(
+        ImageName(s"$dhNamespace/${name.value.toLowerCase}:latest")
+      , ImageName(
+          repository = name.value.toLowerCase
+        , namespace = Some(dhNamespace)
+        , tag = Some(version.value)
       )
-    )).settings(
-  dockerfile in docker := {
-    val jarFile = artifactPath.in(Compile, packageBin).value
-    val classpath = managedClasspath.in(Compile).value
-    val depClasspath = dependencyClasspath.in(Runtime).value
-    val mainclass = mainClass.in(Compile, packageBin).value.get
-    val resoursespath = sourceDirectory.in(Compile, packageBin).value
-    val app = "/app"
-    val etc = s"$app/etc"
-    val log = s"$app/log"
-    val libs = s"$app/libs"
-    val jarTarget = s"$app/${name.value.toLowerCase}.jar"
-    val classpathString = s"$libs/*:$jarTarget"
-    new Dockerfile {
-      from("anapsix/alpine-java")
-      run("mkdir", app, etc, log)
-      workDir(app)
-      classpath.files.foreach { depFile =>
-        val target = file(libs) / depFile.name
-        stageFile(depFile, target)
+    )
+  )
+  .settings(
+      dockerfile in docker := {
+      val jarFile         = artifactPath.in(Compile, packageBin).value
+      val classpath       = managedClasspath.in(Compile).value
+      val depClasspath    = dependencyClasspath.in(Runtime).value
+      val mainclass       = mainClass.in(Compile, packageBin).value.get
+      val resoursespath   = sourceDirectory.in(Compile, packageBin).value
+      val app             = "/app"
+      val etc             = s"$app/etc"
+      val log             = s"$app/log"
+      val libs            = s"$app/libs"
+      val jarTarget       = s"$app/${name.value.toLowerCase}.jar"
+      val classpathString = s"$libs/*:$jarTarget"
+      new Dockerfile {
+        from("anapsix/alpine-java")
+        run("mkdir", app, etc, log)
+        workDir(app)
+        classpath.files.foreach { depFile =>
+          val target = file(libs) / depFile.name
+          stageFile(depFile, target)
+        }
+        depClasspath.files.foreach { depFile =>
+          val target = file(libs) / depFile.name
+          stageFile(depFile, target)
+        }
+        addRaw(libs, libs)
+        add(jarFile, jarTarget)
+        add(resoursespath, etc)
+        cmd("java", "-Xms256m", "-Xmx256m", "-cp", classpathString, mainclass)
       }
-      depClasspath.files.foreach { depFile =>
-        val target = file(libs) / depFile.name
-        stageFile(depFile, target)
-      }
-      addRaw(libs, libs)
-      add(jarFile, jarTarget)
-      add(resoursespath, etc)
-      cmd("java",
-        "-Xms256m",
-        "-Xmx256m",
-        "-cp", classpathString, mainclass)
     }
-  }
-)
+  )
