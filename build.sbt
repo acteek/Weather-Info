@@ -66,50 +66,48 @@ lazy val main = (project in file("."))
       //      "org.scalamock"              %% "scalamock-scalatest-support" % "3.6.0"   % Test,
     )
   )
-  .enablePlugins()
-//  .settings(docker := docker.dependsOn(Keys.`package`.in(Compile, packageBin)).value)
-//  .settings(
-//    imageNames in docker := Seq(
-//      ImageName(s"$dhNamespace/${name.value.toLowerCase}:latest"),
-//      ImageName(
-//        repository = name.value.toLowerCase,
-//        namespace = Some(dhNamespace),
-//        tag = Some(version.value)
-//      )
-//    )).settings(
-//  dockerfile in docker := {
-//    val jarFile = artifactPath.in(Compile, packageBin).value
-//    val classpath = managedClasspath.in(Compile).value
-//    val depClasspath = dependencyClasspath.in(Runtime).value
-//    val mainclass = mainClass.in(Compile, packageBin).value.get
-//    val resoursespath = sourceDirectory.in(Compile, packageBin).value
-//    val app = "/app"
-//    val etc = s"$app/etc"
-//    val log = s"$app/log"
-//    val libs = s"$app/libs"
-//    val jarTarget = s"$app/${name.value.toLowerCase}.jar"
-//    val classpathString = s"$libs/*:$jarTarget"
-//    new Dockerfile {
-//      from("anapsix/alpine-java")
-//      run("mkdir", app, etc, log)
-//      workDir(app)
-//      classpath.files.foreach { depFile =>
-//        val target = file(libs) / depFile.name
-//        stageFile(depFile, target)
-//      }
-//      depClasspath.files.foreach { depFile =>
-//        val target = file(libs) / depFile.name
-//        stageFile(depFile, target)
-//      }
-//      addRaw(libs, libs)
-//      add(jarFile, jarTarget)
-//      add(resoursespath, etc)
-//      cmd("java",
-//        "-Xms256m",
-//        "-Xmx256m",
-//        "-Dlogger.file=/app/etc/resources/prod_conf/logback.xml",
-//        "-Dconfig.file=/app/etc/resources/prod_conf/application.conf",
-//        "-cp", classpathString, mainclass)
-//    }
-//  }
-//)
+  .enablePlugins(DockerPlugin)
+  .settings(docker := docker.dependsOn(Keys.`package`.in(Compile, packageBin)).value)
+  .settings(
+    imageNames in docker := Seq(
+      ImageName(s"$dhNamespace/${name.value.toLowerCase}:latest"),
+      ImageName(
+        repository = name.value.toLowerCase,
+        namespace = Some(dhNamespace),
+        tag = Some(version.value)
+      )
+    )).settings(
+  dockerfile in docker := {
+    val jarFile = artifactPath.in(Compile, packageBin).value
+    val classpath = managedClasspath.in(Compile).value
+    val depClasspath = dependencyClasspath.in(Runtime).value
+    val mainclass = mainClass.in(Compile, packageBin).value.get
+    val resoursespath = sourceDirectory.in(Compile, packageBin).value
+    val app = "/app"
+    val etc = s"$app/etc"
+    val log = s"$app/log"
+    val libs = s"$app/libs"
+    val jarTarget = s"$app/${name.value.toLowerCase}.jar"
+    val classpathString = s"$libs/*:$jarTarget"
+    new Dockerfile {
+      from("anapsix/alpine-java")
+      run("mkdir", app, etc, log)
+      workDir(app)
+      classpath.files.foreach { depFile =>
+        val target = file(libs) / depFile.name
+        stageFile(depFile, target)
+      }
+      depClasspath.files.foreach { depFile =>
+        val target = file(libs) / depFile.name
+        stageFile(depFile, target)
+      }
+      addRaw(libs, libs)
+      add(jarFile, jarTarget)
+      add(resoursespath, etc)
+      cmd("java",
+        "-Xms256m",
+        "-Xmx256m",
+        "-cp", classpathString, mainclass)
+    }
+  }
+)

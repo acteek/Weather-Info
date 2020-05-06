@@ -8,7 +8,6 @@
     <meta name="author" content="acteek@yandex.ru">
     <meta name="google-site-verification" content="YSD8KlWIQ8DdiJXorRvUNgK5CsOdMALrZjBp3nrjphI"/>
     <title>Weather-info</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="icon" type="image/svg" href="icon.svg">
 </head>
 <body>
@@ -46,15 +45,9 @@
     </nav>
 
     <div class="container-fluid" style="padding-top: 70px">
-<!--        <temp-chart></temp-chart>-->
         <metrics-chart :labels="labels" :graph="tempGraph" ></metrics-chart>
         <metrics-chart :labels="labels" :graph="humGraph" ></metrics-chart>
         <metrics-chart :labels="labels" :graph="windGraph" ></metrics-chart>
-
-<!--        <humidity-chart></humidity-chart>-->
-<!--        <weed-speed-chart></weed-speed-chart>-->
-
-
     </div>
 </div>
 <script src="/dist/build.js"></script>
