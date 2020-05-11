@@ -21,6 +21,7 @@ object Server {
   def apply[F[_]: ConcurrentEffect: Timer: ContextShift](
         repository: Repository[F]
       , conf: ServiceConf
+      , blocker: Blocker
       , ex: ExecutionContext
   ): Server[F] = new Server[F] with Http4sDsl[F] {
 
@@ -28,18 +29,22 @@ object Server {
       HttpRoutes
         .of[F] {
           case req @ GET -> Root / "metrics" =>
+            val city = req.params("city")
+            val from = req.params("from").toLong
+            val to   = req.params("to").toLong
+
             repository
-              .getMetricsByCity(req.params("city"), 0L, Long.MaxValue)
+              .getMetricsByCity(city, from, to)
               .flatMap(m => Ok(m.asJson.spaces2))
 
           case GET -> Root =>
             StaticFile
-              .fromResource("ui/index.html", Blocker.liftExecutionContext(ex))
+              .fromResource("ui/index.html", blocker)
               .getOrElseF(NotFound())
 
           case GET -> path =>
             StaticFile
-              .fromResource(s"ui/$path", Blocker.liftExecutionContext(ex))
+              .fromResource(s"ui/$path", blocker)
               .getOrElseF(NotFound())
 
         }

@@ -10,23 +10,17 @@ import VueMomentJS from 'vue-momentjs'
 import './metricsChart.js'
 
 window.Popper = Popper
-
-Vue.use(VueResource);
-Vue.use(VueMomentJS, moment);
-
-const df = 'YYYY-MM-DDTHH:mm'
-var currentDate = moment().format(df) ;
-
+Vue.use( VueResource, VueMomentJS, moment);
 
 var vm = new Vue({
   el: '#app',
   data: function() { return {
-    searchCity: '',
-    dateFrom: currentDate,
-    dateTo: this.$moment(currentDate).add(3,'days').format(df),
+    targetCity: '',
+    cities: ['Berlin', 'Saint Petersburg', 'Moscow', 'Penza', 'Barcelona'],
+    period: 3,
     labels: [],
     tempGraph: {
-      label: 'Температура °С',
+      label: 'Temperature °С',
       data:[],
       color: {
         background: 'rgba(255, 99, 132, 0.2)',
@@ -34,7 +28,7 @@ var vm = new Vue({
       }
     },
     humGraph: {
-      label: 'Влажность воздуха %',
+      label: 'Air humidity %',
       data:[],
       color: {
         background: 'rgba(99, 255, 132, 0.2)',
@@ -42,7 +36,7 @@ var vm = new Vue({
       }
     },
     windGraph: {
-      label: 'Скорость ветра m/s',
+      label: 'Wind speed m/s',
       data:[],
       color: {
         background: 'rgba(99, 132, 255, 0.2)',
@@ -51,18 +45,17 @@ var vm = new Vue({
     }
   }},
   computed: {
-
-    dateMin() {
-     return currentDate
+    from() {
+     return moment().unix()
     },
-    dateMax() {
-     return this.$moment(currentDate).add(5,'days').format(df)
+    to(){
+    return moment().add(this.period,'days').unix()
     }
   },
   methods: {
-   getMetrics: function() {
+   updateMetrics: function() {
      this.clearMetricData()
-  	 this.$http.get('metrics?city='+this.searchCity+'&date-from='+this.dateFrom+'&date-to='+this.dateTo)
+  	 this.$http.get('metrics?city='+ this.targetCity+'&from='+this.from+'&to='+this.to)
   	    .then(response => {
            response.body.forEach ( metric => {
               var label = moment.unix(metric.time).format('MMM Do, HH:mm')
@@ -81,9 +74,14 @@ var vm = new Vue({
       this.windGraph.data = []
   	}
   },
-  created: function() {
-    //Первичная отрисовка
-  	this.searchCity = 'Санкт-Петербург'
-  	this.getMetrics()
-  	},
+   watch: {
+     targetCity: 'updateMetrics',
+     period: 'updateMetrics',
+
+   },
+   created: function(){
+     this.targetCity = this.cities[1]
+     this.updateMetrics()
+
+   },
 })

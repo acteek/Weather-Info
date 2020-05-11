@@ -12,42 +12,39 @@
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-toggleable-sm navbar-light fixed-top bg-faded">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar5">
+    <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+        <div class="navbar-brand">Forecast</div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-brand">Weather-info</div>
-        <div class="navbar-collapse collapse justify-content-stretch" id="navbar5">
-            <div class="navbar-nav">
-                <form class="form-inline d-flex flex-row ">
+        <div class="collapse navbar-collapse  justify-content-center" id="navbarCollapse">
+            <form class="form-inline mt-2 mt-md-0">
+                <div class="form-group p-1">
+                    <select class="form-control" v-model="period">
+                        <option value="1">24 hours</option>
+                        <option value="3">3 days</option>
+                        <option value="5">5 days</option>
+                    </select>
+                </div>
 
-                    <div class="form-group p-2">
-                        <label for="date-from">From date</label>
-                        <input type="datetime-local" id="date-from" name="date-from" class="form-control mx-sm-3"
-                               aria-describedby="" v-model="dateFrom" v-bind:min="dateMin" v-bind:max="dateMax">
-                    </div>
-                    <div class="form-group p-2">
-                        <label for="date-to">To date </label>
-                        <input type="datetime-local" id="date-to" name="date-to" class="form-control mx-sm-3"
-                               aria-describedby="" v-model="dateTo" v-bind:min="dateMin" v-bind:max="dateMax">
-                    </div>
-                    <div class="form-group p-2">
-                        <input class="form-control" v-model="searchCity" v-on:keyup.enter="getMetrics" name="city"
-                               type="text" placeholder="город для запроса">
-                    </div>
+                <div class="form-group p-1">
 
-                    <div class="form-group p-2">
-                        <button class="btn btn-outline-success" v-on:click="getMetrics" type="button">Прогноз</button>
-                    </div>
-                </form>
-            </div>
+
+                    <select class="form-control selectpicker" v-model="targetCity">
+                        <option v-for="city in cities" v-bind:value="city">
+                            {{ city }}
+                    </select>
+                </div>
+
+            </form>
         </div>
     </nav>
 
     <div class="container-fluid" style="padding-top: 70px">
-        <metrics-chart :labels="labels" :graph="tempGraph" ></metrics-chart>
-        <metrics-chart :labels="labels" :graph="humGraph" ></metrics-chart>
-        <metrics-chart :labels="labels" :graph="windGraph" ></metrics-chart>
+        <metrics-chart :labels="labels" :graph="tempGraph"></metrics-chart>
+        <metrics-chart :labels="labels" :graph="humGraph"></metrics-chart>
+        <metrics-chart :labels="labels" :graph="windGraph"></metrics-chart>
     </div>
 </div>
 <script src="/dist/build.js"></script>
