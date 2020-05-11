@@ -1,4 +1,4 @@
-package ru.acteek.weather.utils
+package com.github.acteek.weather
 
 import org.joda.time.format._
 
@@ -9,8 +9,6 @@ object Utils {
 
   val frontTimeFormat: DateTimeFormatter = DateTimeFormat.forPattern(frontPattern)
   val backTimeFormat: DateTimeFormatter = DateTimeFormat.forPattern(backPattern)
-
-  def normalizeLabel(label: String): String = label.drop(8).dropRight(3)
 
   def windDirectionByDegrees(degrees: Double): String = degrees match {
     case deg if (11.25 <= deg) && (deg < 33.75) => "NNE"

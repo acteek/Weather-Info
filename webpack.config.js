@@ -2,10 +2,10 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './src/main.js',
+  entry: './src/main/js/main.js',
   output: {
-    path: path.resolve(__dirname, '../resources/ui/dist/'),
-    publicPath: '../resources/ui/dist/',
+    path: path.resolve(__dirname, './src/main/resources/ui/dist/'),
+    publicPath: './src/main/resources/ui/dist/',
     filename: 'build.js'
   },
   module: {
@@ -16,7 +16,6 @@ module.exports = {
         options: {
           loaders: {
           }
-          // other vue-loader options go here
         }
       },
       {
@@ -30,13 +29,18 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
       }
     ]
   },
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
-    }
+    },
+    extensions: ['.js', '.jsx', '.css']
   },
   devServer: {
     historyApiFallback: true,

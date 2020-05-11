@@ -1,4 +1,1 @@
-//addSbtPlugin("se.marcuslonnberg" % "sbt-docker" % "1.4.1")
-//
-//addSbtPlugin("io.shaka" % "sbt-npm" % "8")
-
+addSbtPlugin("se.marcuslonnberg" % "sbt-docker" % "1.5.0")

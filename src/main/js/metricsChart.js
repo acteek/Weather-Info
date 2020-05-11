@@ -2,36 +2,20 @@ import Vue from 'vue'
 import VueCharts from 'vue-chartjs'
 
 
-export default Vue.component('temp-chart', {
+export default Vue.component('metrics-chart', {
   extends: VueCharts.Line,
+  props: ['labels', 'graph' ],
   computed: {
-    labels() { return this.$root.labels},
     datasets(){
     return [
         {
           fill: true,
-          label: 'Температура °С',
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 60, 132, 1)',
+          label: this.graph.label,
+          backgroundColor: this.graph.color.background ,
+          borderColor: this.graph.color.border,
           borderWidth: 1 ,
-          data: this.$root.tempData
+          data: this.graph.data
         },
-        {
-          fill: true,
-          label: 'Min отклонение',
-          backgroundColor: 'rgba(41, 194, 168, 0.1)',
-          borderColor: 'rgba(41, 194, 168, 1)',
-          borderWidth: 1 ,
-          data: this.$root.tempMinData
-        },
-        {
-          fill: true,
-          label: 'Max отклонение',
-          backgroundColor: 'rgba(222, 222, 49, 0.1)',
-          borderColor: 'rgba(222, 222, 49, 1)',
-          borderWidth: 1 ,
-          data: this.$root.tempMaxData
-        }
      ]
     }
   },
